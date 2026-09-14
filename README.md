@@ -63,5 +63,5 @@ accent-ko plan --suite sqa --out data/manifests/sqa
 - [논문 v1, 2025-04-01](https://arxiv.org/html/2504.01094v1)
 - [저자 공식 저장소](https://github.com/jrohsc/Multi-AudioJail/tree/258d67e0eb2325f195dc53c556db8b5e0df3d8d1): 공개 코드의 후속 버전이며 v1의 정확한 실행 환경과 동일하다고 가정하지 않습니다.
 - [한국어 번역 데이터](https://github.com/timjin06/accent-jailbreak-ko): 사용자 제공 520문항
-
+- [데이터셋 원본](https://huggingface.co/datasets/walledai/AdvBench/viewer)
 기존 데이터의 이용 조건과 각 모델·TTS·IR의 이용 조건은 해당 출처를 따릅니다. 본 변경으로 원본 데이터의 라이선스를 새로 지정하지 않습니다.
