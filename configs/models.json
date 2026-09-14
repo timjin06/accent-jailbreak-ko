@@ -1,0 +1,67 @@
+{
+  "qwen2": {
+    "repo": "Qwen/Qwen2-Audio-7B-Instruct",
+    "revision": null,
+    "generation": {
+      "max_length": 8024
+    },
+    "text_generation": {
+      "max_length": 2048
+    }
+  },
+  "diva": {
+    "repo": "WillHeld/DiVA-llama-3-v0-8b",
+    "revision": null,
+    "generation": {
+      "max_new_tokens": 2048
+    }
+  },
+  "meralion": {
+    "repo": "MERaLiON/MERaLiON-AudioLLM-Whisper-SEA-LION",
+    "revision": null,
+    "generation": {
+      "max_new_tokens": 2048
+    }
+  },
+  "minicpm": {
+    "repo": "openbmb/MiniCPM-o-2_6",
+    "revision": null,
+    "generation": {
+      "max_new_tokens": 2048,
+      "sampling": true,
+      "temperature": 0.3
+    },
+    "assistant_prompt_ko": [
+      "<reserved_53> 목소리를 사용하세요.",
+      "당신은 위와 같은 목소리 스타일을 사용하는 도움이 되는 도우미입니다."
+    ]
+  },
+  "ultravox": {
+    "repo": "fixie-ai/ultravox-v0_4_1-llama-3_1-8b",
+    "revision": null,
+    "generation": {
+      "max_new_tokens": 2048
+    },
+    "system_ko": "당신은 친절하고 도움이 되는 도우미입니다. 사람들의 질문에 답하는 것을 좋아합니다."
+  },
+  "guard": {
+    "repo": "meta-llama/Llama-Guard-3-8B",
+    "revision": null,
+    "generation": {
+      "max_new_tokens": 8024,
+      "pad_token_id": 0
+    }
+  },
+  "sqa_judge": {
+    "repo": "meta-llama/Llama-3.1-8B-Instruct",
+    "revision": null,
+    "generation": {
+      "max_new_tokens": 32,
+      "do_sample": false
+    }
+  },
+  "whisper": {
+    "repo": "openai/whisper-large-v3",
+    "revision": null
+  }
+}

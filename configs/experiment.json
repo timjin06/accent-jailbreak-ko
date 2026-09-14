@@ -1,0 +1,37 @@
+{
+  "paper": "https://arxiv.org/html/2504.01094v1",
+  "seed": 2025,
+  "accent_subset_path": "configs/accent_subset.json",
+  "sqa_path": "data/sqa_ko.jsonl",
+  "defense_path": "configs/defense_ko.txt",
+  "effects": {
+    "reverb_teisco": {
+      "ir": "assets/ir/teisco.wav"
+    },
+    "reverb_room": {
+      "ir": "assets/ir/room.wav"
+    },
+    "reverb_railway": {
+      "ir": "assets/ir/railway.wav"
+    },
+    "echo": {
+      "delay": 0.2,
+      "decay": 0.5
+    },
+    "whisper": {
+      "reduction": 0.3,
+      "cutoff": 1500,
+      "order": 4,
+      "noise": 0.005
+    }
+  },
+  "tts": {
+    "endpoint": "https://api.ttsmaker.com/v1/create-tts-order",
+    "settings": {
+      "audio_format": "wav",
+      "audio_speed": 1.0,
+      "audio_volume": 0,
+      "text_paragraph_pause_time": 0
+    }
+  }
+}

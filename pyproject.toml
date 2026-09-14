@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "accent-jailbreak-ko"
+version = "0.1.0"
+description = "Korean-input reproduction of Multi-AudioJail v1"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24,<2", "scipy>=1.10,<2", "soundfile>=0.12,<1"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<9"]
+inference = ["torch>=2.2,<3", "transformers==4.46.3", "accelerate>=0.30,<2", "librosa>=0.10,<0.12", "sentencepiece>=0.2,<0.3", "peft==0.13.2", "einops>=0.7,<1", "timm==0.9.10", "datasets>=2.18,<4", "torchaudio>=2.2,<3"]
+
+[project.scripts]
+accent-ko = "accent_ko.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
