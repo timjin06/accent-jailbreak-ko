@@ -1,0 +1,15 @@
+.venv*/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.env
+.DS_Store
+assets/audio/*
+!assets/audio/.gitkeep
+assets/ir/*
+!assets/ir/.gitkeep
+data/manifests/*
+!data/manifests/.gitkeep
+results/*
+!results/.gitkeep
