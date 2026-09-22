@@ -1,0 +1,382 @@
+[
+  {
+    "id": "native-en-US-1",
+    "group": "native",
+    "source_locale": "en-US",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-en-US-2",
+    "group": "native",
+    "source_locale": "en-US",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-de-1",
+    "group": "native",
+    "source_locale": "de",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-de-2",
+    "group": "native",
+    "source_locale": "de",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-it-1",
+    "group": "native",
+    "source_locale": "it",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-it-2",
+    "group": "native",
+    "source_locale": "it",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-es-1",
+    "group": "native",
+    "source_locale": "es",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-es-2",
+    "group": "native",
+    "source_locale": "es",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-fr-1",
+    "group": "native",
+    "source_locale": "fr",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-fr-2",
+    "group": "native",
+    "source_locale": "fr",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-pt-1",
+    "group": "native",
+    "source_locale": "pt",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-pt-2",
+    "group": "native",
+    "source_locale": "pt",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-unreported-native-7-1",
+    "group": "native",
+    "source_locale": "unreported-native-7",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-unreported-native-7-2",
+    "group": "native",
+    "source_locale": "unreported-native-7",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-unreported-native-8-1",
+    "group": "native",
+    "source_locale": "unreported-native-8",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "native-unreported-native-8-2",
+    "group": "native",
+    "source_locale": "unreported-native-8",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "natural-en-AU-1",
+    "group": "natural",
+    "source_locale": "en-AU",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "natural-en-SG-1",
+    "group": "natural",
+    "source_locale": "en-SG",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "natural-en-ZA-1",
+    "group": "natural",
+    "source_locale": "en-ZA",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "natural-en-PH-1",
+    "group": "natural",
+    "source_locale": "en-PH",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "natural-en-KE-1",
+    "group": "natural",
+    "source_locale": "en-KE",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "natural-en-NG-1",
+    "group": "natural",
+    "source_locale": "en-NG",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-zh-1",
+    "group": "synthetic",
+    "source_locale": "zh",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-zh-2",
+    "group": "synthetic",
+    "source_locale": "zh",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ko-1",
+    "group": "synthetic",
+    "source_locale": "ko",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ko-2",
+    "group": "synthetic",
+    "source_locale": "ko",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ja-1",
+    "group": "synthetic",
+    "source_locale": "ja",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ja-2",
+    "group": "synthetic",
+    "source_locale": "ja",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ar-1",
+    "group": "synthetic",
+    "source_locale": "ar",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ar-2",
+    "group": "synthetic",
+    "source_locale": "ar",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-pt-1",
+    "group": "synthetic",
+    "source_locale": "pt",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-pt-2",
+    "group": "synthetic",
+    "source_locale": "pt",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-es-1",
+    "group": "synthetic",
+    "source_locale": "es",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-es-2",
+    "group": "synthetic",
+    "source_locale": "es",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ta-1",
+    "group": "synthetic",
+    "source_locale": "ta",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-ta-2",
+    "group": "synthetic",
+    "source_locale": "ta",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-unreported-synthetic-8-1",
+    "group": "synthetic",
+    "source_locale": "unreported-synthetic-8",
+    "speaker": 1,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  },
+  {
+    "id": "synthetic-unreported-synthetic-8-2",
+    "group": "synthetic",
+    "source_locale": "unreported-synthetic-8",
+    "speaker": 2,
+    "voice_id": null,
+    "elevenlabs_name": null,
+    "accent_label": null,
+    "settings": {}
+  }
+]

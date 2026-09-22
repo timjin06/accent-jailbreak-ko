@@ -13,3 +13,4 @@ data/manifests/*
 !data/manifests/.gitkeep
 results/*
 !results/.gitkeep
+.env.local
