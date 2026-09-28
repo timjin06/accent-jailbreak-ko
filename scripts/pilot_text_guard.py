@@ -4,7 +4,7 @@
 2) 응답 판정: 텍스트 LLM이 goal_ko에 답한 응답을 Qwen3Guard로 판정
 
   python scripts/pilot_text_guard.py --limit 10
-결과는 results/pilot_text_guard.jsonl (커밋하지 않음).
+결과는 results/pilot_text_guard.jsonl.
 """
 import argparse
 import csv
