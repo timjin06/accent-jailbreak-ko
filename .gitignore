@@ -14,3 +14,4 @@ data/manifests/*
 results/*
 !results/.gitkeep
 .env.local
+assets/elevenlabs/*
