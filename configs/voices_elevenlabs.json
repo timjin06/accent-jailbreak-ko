@@ -24,9 +24,9 @@
     "group": "native",
     "source_locale": "de",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "FTNCalFNG5bRnkkaP5Ug",
+    "elevenlabs_name": "Otto - Casual and Normal",
+    "accent_label": "de-DE standard",
     "settings": {}
   },
   {
@@ -34,9 +34,9 @@
     "group": "native",
     "source_locale": "de",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "dCnu06FiOZma2KVNUoPZ",
+    "elevenlabs_name": "Mila - Confident and Opinionated",
+    "accent_label": "de-DE standard",
     "settings": {}
   },
   {
@@ -44,9 +44,9 @@
     "group": "native",
     "source_locale": "it",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "W71zT1VwIFFx3mMGH2uZ",
+    "elevenlabs_name": "MarcoTrox - Warm, Balanced and Polished",
+    "accent_label": "it-IT standard",
     "settings": {}
   },
   {
@@ -54,9 +54,9 @@
     "group": "native",
     "source_locale": "it",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "gfKKsLN1k0oYYN9n2dXX",
+    "elevenlabs_name": "Violetta - Ringing, Bright and Joyful",
+    "accent_label": "it-IT standard",
     "settings": {}
   },
   {
@@ -64,9 +64,9 @@
     "group": "native",
     "source_locale": "es",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "Nh2zY9kknu6z4pZy6FhD",
+    "elevenlabs_name": "David Martin - Confident and Balanced",
+    "accent_label": "es-ES peninsular",
     "settings": {}
   },
   {
@@ -74,9 +74,9 @@
     "group": "native",
     "source_locale": "es",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "KHCvMklQZZo0O30ERnVn",
+    "elevenlabs_name": "Sara Martin - Gentle and Layered",
+    "accent_label": "es-ES peninsular",
     "settings": {}
   },
   {
@@ -84,9 +84,9 @@
     "group": "native",
     "source_locale": "fr",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "aQROLel5sQbj1vuIVi6B",
+    "elevenlabs_name": "Nicolas - Narrator",
+    "accent_label": "fr-FR parisian",
     "settings": {}
   },
   {
@@ -94,9 +94,9 @@
     "group": "native",
     "source_locale": "fr",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "McVZB9hVxVSk3Equu8EH",
+    "elevenlabs_name": "Audrey - Energetic Commercial",
+    "accent_label": "fr-FR standard",
     "settings": {}
   },
   {
@@ -104,9 +104,9 @@
     "group": "native",
     "source_locale": "pt",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "36rVQA1AOIPwpA3Hg1tC",
+    "elevenlabs_name": "Matheus - Friendly and Energetic",
+    "accent_label": "pt-BR",
     "settings": {}
   },
   {
@@ -114,9 +114,9 @@
     "group": "native",
     "source_locale": "pt",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "33B4UnXyTNbgLmdEDh5P",
+    "elevenlabs_name": "Keren - Sweet, Vibrant and Rhythmic",
+    "accent_label": "pt-BR brazilian",
     "settings": {}
   },
   {
@@ -174,9 +174,9 @@
     "group": "natural",
     "source_locale": "en-SG",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "6EYhQ5gVgyv1Z20WprFH",
+    "elevenlabs_name": "Adam Faris",
+    "accent_label": "en-SG singaporean",
     "settings": {}
   },
   {
@@ -184,9 +184,9 @@
     "group": "natural",
     "source_locale": "en-ZA",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "gsm4lUH9bnZ3pjR1Pw7w",
+    "elevenlabs_name": "Claire - Neutral, Even, and Polished",
+    "accent_label": "en-ZA south african",
     "settings": {}
   },
   {
@@ -194,9 +194,9 @@
     "group": "natural",
     "source_locale": "en-PH",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "6AUOG2nbfr0yFEeI0784",
+    "elevenlabs_name": "Rachel - Inviting, Warm, and Friendly",
+    "accent_label": "en-PH filipino",
     "settings": {}
   },
   {
@@ -214,9 +214,9 @@
     "group": "natural",
     "source_locale": "en-NG",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "zwbf3iHXH6YGoTCPStfx",
+    "elevenlabs_name": "Dayo - Clear, Direct and Natural",
+    "accent_label": "en-NG nigerian",
     "settings": {}
   },
   {
@@ -224,9 +224,9 @@
     "group": "synthetic",
     "source_locale": "zh",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "DowyQ68vDpgFYdWVGjc3",
+    "elevenlabs_name": "Jason Chen - Deep, Magnetic and Calm",
+    "accent_label": "cmn-CN beijing mandarin",
     "settings": {}
   },
   {
@@ -234,9 +234,9 @@
     "group": "synthetic",
     "source_locale": "zh",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "hkfHEbBvdQFNX4uWHqRF",
+    "elevenlabs_name": "Stacy - Young, Sweet and Cute",
+    "accent_label": "cmn-CN standard",
     "settings": {}
   },
   {
@@ -244,9 +244,9 @@
     "group": "synthetic",
     "source_locale": "ko",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "ZJCNdZEjYwkOElxugmW2",
+    "elevenlabs_name": "Hyuk - Cold and Clear",
+    "accent_label": "ko-KR standard",
     "settings": {}
   },
   {
@@ -254,9 +254,9 @@
     "group": "synthetic",
     "source_locale": "ko",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "uyVNoMrnUku1dZyVEXwD",
+    "elevenlabs_name": "Anna Kim - Tender, Calm and Clear",
+    "accent_label": "ko-KR seoul",
     "settings": {}
   },
   {
@@ -264,9 +264,9 @@
     "group": "synthetic",
     "source_locale": "ja",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "3JDquces8E8bkmvbh6Bc",
+    "elevenlabs_name": "Otani - Inviting, Clear and Measured",
+    "accent_label": "ja-JP standard",
     "settings": {}
   },
   {
@@ -274,9 +274,9 @@
     "group": "synthetic",
     "source_locale": "ja",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "B8gJV1IhpuegLxdpXFOE",
+    "elevenlabs_name": "Kuon - Cheerful, Clear and Steady",
+    "accent_label": "ja-JP standard",
     "settings": {}
   },
   {
@@ -284,9 +284,9 @@
     "group": "synthetic",
     "source_locale": "ar",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "IES4nrmZdUBHByLBde0P",
+    "elevenlabs_name": "Haytham - Energetic, Warm and Cheerful",
+    "accent_label": "ar-EG egyptian",
     "settings": {}
   },
   {
@@ -294,9 +294,9 @@
     "group": "synthetic",
     "source_locale": "ar",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "u0TsaWvt0v8migutHM3M",
+    "elevenlabs_name": "Ghizlane - Smooth, Distinctive and Calm",
+    "accent_label": "ar-SA modern standard",
     "settings": {}
   },
   {
@@ -304,9 +304,9 @@
     "group": "synthetic",
     "source_locale": "pt",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "tS45q0QcrDHqHoaWdCDR",
+    "elevenlabs_name": "Lax - Funny, Sarcastic and Smooth",
+    "accent_label": "pt-BR brazilian",
     "settings": {}
   },
   {
@@ -314,9 +314,9 @@
     "group": "synthetic",
     "source_locale": "pt",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "lWq4KDY8znfkV0DrK8Vb",
+    "elevenlabs_name": "Yasmin Alves - Light, Clear and Musical",
+    "accent_label": "pt-BR brazilian",
     "settings": {}
   },
   {
@@ -324,9 +324,9 @@
     "group": "synthetic",
     "source_locale": "es",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "l1zE9xgNpUTaQCZzpNJa",
+    "elevenlabs_name": "Alberto Rodríguez - Serious, Narrative",
+    "accent_label": "es-AR latin american",
     "settings": {}
   },
   {
@@ -334,9 +334,9 @@
     "group": "synthetic",
     "source_locale": "es",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "2Lb1en5ujrODDIqmp7F3",
+    "elevenlabs_name": "Jhenny - Soft, Calm, Sweet",
+    "accent_label": "es-AR latin american",
     "settings": {}
   },
   {
@@ -344,9 +344,9 @@
     "group": "synthetic",
     "source_locale": "ta",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "ZhJ5LanYnCmLKQUXvsV7",
+    "elevenlabs_name": "Ramaa - Motivational and Confident",
+    "accent_label": "ta-IN standard",
     "settings": {}
   },
   {
@@ -354,9 +354,9 @@
     "group": "synthetic",
     "source_locale": "ta",
     "speaker": 2,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "gCr8TeSJgJaeaIoV4RWH",
+    "elevenlabs_name": "Meera - Friendly and Conversational",
+    "accent_label": "ta-IN standard",
     "settings": {}
   },
   {
