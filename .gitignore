@@ -16,3 +16,6 @@ results/*
 !results/pilot_text_guard.jsonl
 .env.local
 assets/elevenlabs/*
+
+# 테스트 노트북 실행 결과
+work_test/
