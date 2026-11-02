@@ -2,8 +2,9 @@
 
 TTSMaker는 비한국어 화자로 한국어 텍스트를 읽지 못한다(docs/experiment-design.md
 「원문 TTS의 한국어 합성 불가」). 이 스크립트는 locale별 ElevenLabs 다국어 음성으로
-같은 한국어 문항을 합성해 억양 축을 만든다. 결과는 assets/audio에 직접 쓰지 않고
-`accent-ko import-clean`으로 등록한다.
+같은 한국어 문항을 합성해 억양 축을 탐색한다. 이 스크립트는 파일럿용이다.
+본 실험은 docs/runbook.md의 ElevenLabs manifest 경로를 사용한다.
+이전 파일럿 음성을 새 본 실험의 생성 출처로 등록하지 않는다.
 
   export ELEVENLABS_API_KEY=...
   python scripts/synthesize_elevenlabs.py --list-voices          # voice_id/억양 라벨 확인
@@ -18,6 +19,7 @@ import urllib.request
 import wave
 from pathlib import Path
 
+from accent_ko.data import TRANSLATION
 from accent_ko.io import file_hash, write_json
 
 API = 'https://api.elevenlabs.io/v1'
@@ -66,7 +68,7 @@ def self_check(tmp):
     with wave.open(str(tmp / 'x.wav')) as w:
         assert (w.getnchannels(), w.getsampwidth(), w.getframerate()) == (1, 2, RATE)
         assert w.getnframes() == len(pcm) // 2
-    prompts = read_prompts(Path('advbench_ko.csv'), 'goal_ko', 3)
+    prompts = read_prompts(Path(TRANSLATION), 'goal_ko', 3)
     assert [pid for pid, _ in prompts] == ['advbench-0000', 'advbench-0001', 'advbench-0002']
     assert all(text.strip() for _, text in prompts)
     print('self-check ok')
@@ -74,7 +76,7 @@ def self_check(tmp):
 
 p = argparse.ArgumentParser(description='ElevenLabs 다국어 음성으로 한국어 프롬프트 합성')
 p.add_argument('--voices', type=Path, default=Path('configs/voices_elevenlabs.json'))
-p.add_argument('--prompts', type=Path, default=Path('advbench_ko.csv'))
+p.add_argument('--prompts', type=Path, default=Path(TRANSLATION))
 p.add_argument('--column', default='goal_ko', help='합성할 텍스트 열: goal_ko(한국어), goal(영어 원문)')
 p.add_argument('--limit', type=int, default=5, help='앞쪽 문항 수. 억양용 400문항 선정 규칙이 아님')
 p.add_argument('--model', default='eleven_v3')

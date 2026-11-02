@@ -47,7 +47,8 @@ def build(root, config, voices, suite, groups=None):
     def add(r, v, condition, params, models, system=None):
         voice = v['id'] if v else None
         key = {'prompt_id': r['id'], 'voice': voice, 'condition': condition, 'params': params}
-        aid = digest(key)[:24] if v else None
+        aid = digest({**key, 'text': r['text'], 'voice_spec': v,
+                      'tts': config['tts'], 'seed': config['seed']})[:24] if v else None
         if aid:
             audio[aid] = {'id': aid, **key, 'text': r['text'], 'voice_spec': v,
                           'path': f'assets/audio/{aid}.wav'}

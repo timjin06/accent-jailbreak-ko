@@ -45,14 +45,14 @@ Table 4의 화자 수를 유지하되, 본문에 이름이 없는 슬롯을 임�
 
 ## 데이터
 
-`advbench_ko.csv`의 `goal_ko`만 모델 입력에 사용합니다. `target`/`target_ko`는 유해한 답변 시작 문구이므로 입력이나 SQA 정답으로 사용하지 않습니다. 원본 행 번호로 `advbench-0000`부터 `advbench-0519`까지 식별합니다. 중복 문장이 있어도 원문 행은 삭제하지 않습니다.
+`src/accent_ko/data.py`의 `TRANSLATION` 상수로 지정한 `advbench_ko_2.csv`의 `goal_ko`만 모델 입력에 사용합니다. 이전 `advbench_ko.csv`는 파일럿 재현·기록용으로 보존합니다. `target`/`target_ko`는 유해한 답변 시작 문구이므로 입력이나 SQA 정답으로 사용하지 않습니다. 원본 행 번호로 `advbench-0000`부터 `advbench-0519`까지 식별합니다. 중복 문장이 있어도 원문 행은 삭제하지 않습니다.
 
 억양용 400문항 선정 규칙은 미공개입니다. `configs/accent_subset.json`은 정확한 ID 400개와 출처를 요구합니다. 앞 400개나 무작위 400개를 자동 선택하지 않습니다. SQA의 원본 100문항도 확보되지 않아 새 문항을 원문처럼 제공하지 않습니다. `data/sqa_ko.jsonl`의 각 행에는 `id`, 한국어 `text`, 한국어 `answer`, 원문 위치 `source`가 필요합니다.
 
 ## 음향 처리
 
 - 잔향: 동일 IR과 FFT full convolution, peak normalization. IR 샘플레이트를 원본 음성에 맞춥니다. 임의의 방 임펄스 응답으로 대체하지 않습니다.
-- 기본 에코: 부록 A.1 코드의 delay 0.2초, decay 0.5를 사용합니다. 본문 §3.2.2의 decay 0.3과 불일치하므로 v1 실측 기본값은 미확인입니다.
+- 기본 에코: Table 12의 기준선에 맞춰 delay 0.3초, decay 0.6을 사용합니다. 이는 본 실험의 명시적 선택입니다. 본문 §3.2.2의 delay 약 0.2초/decay 0.3 및 부록 A.1 코드의 delay 0.2초/decay 0.5와 불일치하므로 v1 전체 실험의 실제 기본값은 미확인입니다.
 - 에코 절제: Table 12의 기준 (delay 0.3초, decay 0.6). 지연만 0.1/0.3/0.6으로 바꾸거나 감쇠만 0.1/0.6/0.9로 바꿉니다. 공통 기준선은 한 번만 생성해 5개 고유 설정으로 구성합니다.
 - 속삭임 효과: 진폭 0.3, cutoff 1500 Hz, order 4, white noise 0.005, 마지막 peak normalization. 미공개 helper 함수는 causal Butterworth 저역통과와 정규분포 잡음으로 재구성했습니다. 이는 실제 속삭임 녹음이 아니며 v1과 파형 단위 동일성을 주장하지 않습니다.
 - 저자의 미공개 잡음 seed 대신 2025와 음성 ID에서 결정적으로 파생한 seed를 기록합니다. WAV PCM16 저장, 모노 변환, 추론 16 kHz resampling도 구현 선택입니다. clean 파형은 별도 peak normalization하지 않습니다.

@@ -5,12 +5,15 @@ from pathlib import Path
 from .io import digest, file_hash, read_json
 
 
+TRANSLATION = 'advbench_ko_2.csv'
+
+
 def load_dataset(root):
     root = Path(root)
     def read(name):
         with (root / name).open(encoding='utf-8-sig', newline='') as f:
             return list(csv.DictReader(f))
-    original, translated = read('advbench.csv'), read('advbench_ko.csv')
+    original, translated = read('advbench.csv'), read(TRANSLATION)
     if len(original) != 520 or len(translated) != 520:
         raise ValueError('Expected exactly 520 rows in each AdvBench CSV')
     rows = []
@@ -23,7 +26,7 @@ def load_dataset(root):
             raise ValueError(f'No Hangul in translated goal at row {i}')
         rows.append({'id': f'advbench-{i:04d}', 'source_row': i,
                      'text': ko['goal_ko'], 'text_sha256': digest(ko['goal_ko'])})
-    return rows, {name: file_hash(root / name) for name in ('advbench.csv', 'advbench_ko.csv')}
+    return rows, {name: file_hash(root / name) for name in ('advbench.csv', TRANSLATION)}
 
 
 def accent_subset(path, rows):

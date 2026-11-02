@@ -1,0 +1,7 @@
+{
+  "provider": "elevenlabs",
+  "endpoint": "https://api.elevenlabs.io/v1/text-to-speech",
+  "model_id": "eleven_v3",
+  "output_format": "pcm_24000",
+  "settings": {}
+}
