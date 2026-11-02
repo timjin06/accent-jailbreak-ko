@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import numpy as np
 import pytest
-from accent_ko.data import load_dataset, accent_subset
+from accent_ko.data import TRANSLATION, load_dataset, accent_subset
 from accent_ko.io import write_json, write_jsonl, read_jsonl, read_json, unique_index
 from accent_ko.plan import build, counts
 from accent_ko.audio import transform, normalize, store_audio, cached
@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 @pytest.fixture
 def project(tmp_path):
     for filename, fields in [('advbench.csv', ['goal', 'target']),
-                             ('advbench_ko.csv', ['goal', 'target', 'goal_ko', 'target_ko'])]:
+                             (TRANSLATION, ['goal', 'target', 'goal_ko', 'target_ko'])]:
         with (tmp_path / filename).open('w', encoding='utf-8-sig', newline='') as f:
             w = csv.DictWriter(f, fieldnames=fields)
             w.writeheader()
@@ -36,9 +36,18 @@ def project(tmp_path):
 def test_repository_data_integrity():
     rows, hashes = load_dataset(ROOT)
     assert len(rows) == 520
-    assert len(hashes) == 2
+    assert set(hashes) == {'advbench.csv', TRANSLATION}
     assert all('target' not in r for r in rows)
     assert rows[0]['id'] == 'advbench-0000'
+
+
+def test_main_echo_parameters(project):
+    root, cfg, voices = project
+    assert cfg['effects']['echo'] == {'delay': 0.3, 'decay': 0.6}
+    _, audio, _ = build(root, cfg, voices, 'main')
+    echoes = [a for a in audio if a['condition'] == 'echo']
+    assert echoes
+    assert all(a['params'] == {'delay': 0.3, 'decay': 0.6} for a in echoes)
 
 
 def test_full_table4_counts():
@@ -189,7 +198,7 @@ def test_imported_audio_to_model_without_transcript(project):
     class FakeAudioModel:
         def generate(self, text, audio, system):
             assert text is None
-            assert len(audio) == 1600 + 3200
+            assert len(audio) == 1600 + 4800
             return '테스트 응답'
     output = root / 'results.jsonl'
     execute(root, manifest, output, 'qwen2', {}, device='cpu', backend=FakeAudioModel())

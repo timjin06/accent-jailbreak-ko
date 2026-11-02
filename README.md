@@ -1,13 +1,15 @@
 # Multi-AudioJail 한국어 입력 재현
 
-[논문 v1](https://arxiv.org/html/2504.01094v1)의 모델·문항 수·원래 화자 슬롯·음향 조건을 유지하고, 입력 문장을 한국어로 교체하는 실험입니다. 원본 `advbench.csv`와 사용자 번역본 `advbench_ko.csv`는 그대로 보존합니다.
+[논문 v1](https://arxiv.org/html/2504.01094v1)의 모델·문항 수·원래 화자 슬롯·음향 조건을 유지하고, 입력 문장을 한국어로 교체하는 실험입니다. 모델 입력에는 `advbench_ko_2.csv`의 `goal_ko`를 사용합니다. 원본 `advbench.csv`와 이전 번역본 `advbench_ko.csv`는 그대로 보존합니다.
 
 **현재 상태:** 데이터 검사, 실험 목록 생성, TTS/기존 음성 가져오기, 음향 변형, 5개 모델 어댑터, Llama Guard 평가, Whisper WER, SQA 평가, 사람 검토 표본과 집계 코드가 있습니다. GPU 실험 결과는 아직 없습니다. 저자의 정확한 TTS 화자 ID·400문항 선정 목록·잔향 IR·SQA 원본이 확인되지 않아, 완전 동일 재현이 완료되었다고 주장하지 않습니다. [재현 설계와 차이점](docs/experiment-design.md)을 먼저 읽어 주세요.
 
 ## 폴더
 
 ```text
-advbench.csv / advbench_ko.csv  원문·사용자 번역본 (변경하지 않음)
+advbench.csv                   영문 원본 (변경하지 않음)
+advbench_ko_2.csv              모델 입력용 한국어 번역본
+advbench_ko.csv                이전 번역본 (파일럿 재현·기록용)
 configs/                      실험 조건, 화자 슬롯, 모델, 방어 프롬프트
 src/accent_ko/                 데이터 → 음성 → 추론 → 평가 코드
 scripts/pin_models.py          모델 참조를 고정 커밋으로 해석
@@ -50,7 +52,9 @@ accent-ko plan --suite ablation --out data/manifests/ablation
 accent-ko plan --suite sqa --out data/manifests/sqa
 ```
 
-이미 내용이 있는 실험 목록 폴더는 덮어쓰지 않습니다. 설정을 변경했다면 새 폴더로 생성하세요. 음성 생성과 추론 명령은 실제 자원/API를 사용하므로 이 저장소 작성 과정에서는 실행하지 않았습니다.
+이미 내용이 있는 실험 목록 폴더는 덮어쓰지 않습니다. 설정이나 번역 데이터를 변경했다면 새 폴더로 생성하세요. 번역 데이터가 바뀌면 데이터 해시도 달라집니다. 음성 생성과 추론 명령은 실제 자원/API를 사용하므로 이 저장소 작성 과정에서는 실행하지 않았습니다.
+
+본 실험 에코는 Table 12의 기준선에 맞춰 delay 0.3초, decay 0.6을 사용합니다. 원문의 본문·부록 코드와의 차이는 [실험 설계](docs/experiment-design.md)에 기록했습니다. Drive의 `prompts.csv`를 사용하는 노트북은 실행 전에 `advbench_ko_2.csv`에서 입력 파일을 다시 만들어야 합니다.
 
 ## 결과 해석
 

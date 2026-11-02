@@ -15,8 +15,8 @@
       "ir": "assets/ir/railway.wav"
     },
     "echo": {
-      "delay": 0.2,
-      "decay": 0.5
+      "delay": 0.3,
+      "decay": 0.6
     },
     "whisper": {
       "reduction": 0.3,

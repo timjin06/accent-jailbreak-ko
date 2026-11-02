@@ -18,6 +18,7 @@ import urllib.request
 import wave
 from pathlib import Path
 
+from accent_ko.data import TRANSLATION
 from accent_ko.io import file_hash, write_json
 
 API = 'https://api.elevenlabs.io/v1'
@@ -66,7 +67,7 @@ def self_check(tmp):
     with wave.open(str(tmp / 'x.wav')) as w:
         assert (w.getnchannels(), w.getsampwidth(), w.getframerate()) == (1, 2, RATE)
         assert w.getnframes() == len(pcm) // 2
-    prompts = read_prompts(Path('advbench_ko.csv'), 'goal_ko', 3)
+    prompts = read_prompts(Path(TRANSLATION), 'goal_ko', 3)
     assert [pid for pid, _ in prompts] == ['advbench-0000', 'advbench-0001', 'advbench-0002']
     assert all(text.strip() for _, text in prompts)
     print('self-check ok')
@@ -74,7 +75,7 @@ def self_check(tmp):
 
 p = argparse.ArgumentParser(description='ElevenLabs 다국어 음성으로 한국어 프롬프트 합성')
 p.add_argument('--voices', type=Path, default=Path('configs/voices_elevenlabs.json'))
-p.add_argument('--prompts', type=Path, default=Path('advbench_ko.csv'))
+p.add_argument('--prompts', type=Path, default=Path(TRANSLATION))
 p.add_argument('--column', default='goal_ko', help='합성할 텍스트 열: goal_ko(한국어), goal(영어 원문)')
 p.add_argument('--limit', type=int, default=5, help='앞쪽 문항 수. 억양용 400문항 선정 규칙이 아님')
 p.add_argument('--model', default='eleven_v3')

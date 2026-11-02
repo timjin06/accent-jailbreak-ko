@@ -27,7 +27,7 @@
 | 기본 좌석 | 좌석당 50,000 크레딧 | API 호출에 쓰이는지는 **미확인** |
 
 - 텍스트 한 문장당 차감은 글자 수 기준으로 봅니다.
-- `advbench_ko.csv`의 `goal_ko` 기준: 520문장, **총 18,213자**(평균 35자, 최대 58자).
+- `advbench_ko_2.csv`의 `goal_ko` 기준: 520문장, **총 18,217자**(평균 35자, 최대 61자).
 - 한 언어 clean 1회 = 약 18,200 크레딧. 교란(reverb, echo, whisper)은 로컬에서 계산하므로 크레딧을 쓰지 않습니다.
 - 10개 언어 = 약 182,000 크레딧. **워크스페이스 남은 양(약 122,900)만으로는 부족합니다.** 좌석 크레딧이 API에 쓰이는지 확인한 뒤 계획을 확정합니다.
 - 본 실험 전에 기존 파일럿(`docs/pilot-2026-09-28.md`)의 사용량도 같은 워크스페이스에서 차감됐는지 확인하세요.
@@ -36,10 +36,12 @@
 
 문장 1개로 **TTS → 장부 → 교란 4개** 흐름이 동작하는지 확인하는 용도입니다. 본 실험용이 아닙니다.
 
-- 입력: `advbench_ko.csv`의 `goal_ko` 첫 행
+- 입력: 현재 테스트 노트북은 `advbench_ko.csv`의 `goal_ko` 첫 행을 읽습니다. 본 실험용 번역은 `advbench_ko_2.csv`입니다. Drive의 `prompts.csv`를 읽는 노트북은 ko_2에서 해당 파일을 다시 만들어야 합니다.
 - TTS: `eleven_multilingual_v2`, `output_format=pcm_16000`, `stability=0.0`, `similarity_boost=0.5`
 - 결과: `work_test/audio/{clean, reverb_room, reverb_large, echo, whisper}/test_000.wav`, `work_test/ledger.csv`
 - 교란 파라미터는 원 논문 부록 A.1을 따르되, IR 파일이 없어 **합성 IR**을 씁니다. 결과는 조건 간 상대 비교용입니다.
+
+본 실험 파이프라인의 기본 에코는 Table 12 기준선에 맞춘 delay 0.3초, decay 0.6입니다. 부록 A.1 코드의 0.2초/0.5와의 차이는 `docs/experiment-design.md`에 기록했습니다.
 
 ### 기존 파이프라인과 다른 점
 
