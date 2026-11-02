@@ -87,6 +87,8 @@ def store_audio(path, x, sr, provenance):
 
 def clean_location(root, item, config):
     provenance = {'text': item['text'], 'voice': item['voice_spec'], 'tts': config['tts']}
+    if config['tts'].get('provider') == 'elevenlabs':
+        provenance['seed'] = int(digest([config['seed'], item['voice'], item['text']])[:8], 16)
     path = Path(root) / 'assets/audio' / ('clean-' + digest(provenance)[:24] + '.wav')
     return path, provenance
 
@@ -97,9 +99,36 @@ def make_clean(root, item, config):
         return path
     voice = item['voice_spec']
     if voice['voice_id'] is None or not voice.get('provenance'):
-        raise ValueError(f"Unresolved original TTS voice: {voice['id']}")
-    if voice['korean_supported'] is not True:
+        raise ValueError(f"Unresolved TTS voice: {voice['id']}")
+    if voice.get('korean_supported') is not True:
         raise ValueError(f"Korean synthesis has not been verified for voice: {voice['id']}")
+    tts = config['tts']
+    provider = tts.get('provider', 'ttsmaker')
+    if provider == 'elevenlabs':
+        if tts['output_format'] != 'pcm_24000':
+            raise ValueError('ElevenLabs manifest synthesis requires pcm_24000')
+        key = os.environ.get('ELEVENLABS_API_KEY')
+        if not key:
+            raise ValueError('Set ELEVENLABS_API_KEY')
+        payload = {'text': item['text'], 'model_id': tts['model_id'],
+                   'voice_settings': {**tts['settings'], **voice['settings']},
+                   'seed': provenance['seed']}
+        req = urllib.request.Request(
+            f"{tts['endpoint']}/{voice['voice_id']}?output_format={tts['output_format']}",
+            data=json.dumps(payload).encode(),
+            headers={'Content-Type': 'application/json', 'xi-api-key': key})
+        # Paid requests are not retried. Store the returned waveform once for all conditions.
+        with urllib.request.urlopen(req, timeout=120) as response:
+            pcm = response.read()
+        if not pcm or len(pcm) % 2:
+            raise ValueError('ElevenLabs did not return non-empty 16-bit mono PCM')
+        x = np.frombuffer(pcm, dtype='<i2').astype(np.float64) / 32768
+        normalize(x)
+        store_audio(path, x, 24000, provenance)
+        time.sleep(1.05)
+        return path
+    if provider != 'ttsmaker':
+        raise ValueError(f'Unsupported TTS provider: {provider}')
     token = os.environ.get('TTSMAKER_TOKEN')
     if not token:
         raise ValueError('Set TTSMAKER_TOKEN or import existing clean audio')
@@ -129,9 +158,16 @@ def make_clean(root, item, config):
 
 def import_clean(root, item, config, source):
     voice = item['voice_spec']
-    if voice['voice_id'] is None or not voice.get('provenance') or voice['korean_supported'] is not True:
-        raise ValueError('Record the original voice identity and verified Korean support before importing audio')
+    if voice['voice_id'] is None or not voice.get('provenance') or voice.get('korean_supported') is not True:
+        raise ValueError('Record the voice identity and verified Korean support before importing audio')
     path, provenance = clean_location(root, item, config)
+    if config['tts'].get('provider') == 'elevenlabs':
+        source_meta = Path(source).with_suffix('.json')
+        if not source_meta.exists():
+            raise ValueError('ElevenLabs import requires matching generation provenance')
+        saved = read_json(source_meta)
+        if saved.get('provenance') != provenance or saved.get('sha256') != file_hash(source):
+            raise ValueError('ElevenLabs source provenance/hash mismatch')
     if cached(path, provenance):
         raise ValueError('Clean asset already exists; no overwriting')
     x, sr = load_audio(source)

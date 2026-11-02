@@ -8,6 +8,8 @@ from .io import read_json, read_jsonl, write_json, unique_index
 def main():
     p = argparse.ArgumentParser(description='Multi-AudioJail 한국어 입력 재현')
     p.add_argument('--root', type=Path, default=Path('.'))
+    p.add_argument('--voice-config', default='configs/voices.json')
+    p.add_argument('--tts-config', help='TTS settings to freeze into new manifests')
     p.add_argument('--model-config', default='configs/models.json')
     sub = p.add_subparsers(dest='command', required=True)
     sub.add_parser('validate')
@@ -59,9 +61,13 @@ def main():
     if hasattr(args, 'limit') and args.limit is not None and args.limit < 1:
         p.error('--limit must be positive')
     root = args.root.resolve()
-    config = read_json(root / 'configs/experiment.json')
-    voices = read_json(root / 'configs/voices.json')
-    models = read_json(root / args.model_config)
+    if args.command in ('validate', 'matrix', 'plan'):
+        config = read_json(root / 'configs/experiment.json')
+        voices = read_json(root / args.voice_config)
+        if args.tts_config:
+            config['tts'] = read_json(root / args.tts_config)
+    if args.command in ('validate', 'run', 'judge', 'transcribe'):
+        models = read_json(root / args.model_config)
     if args.command == 'validate':
         from .data import load_dataset
         rows, hashes = load_dataset(root)

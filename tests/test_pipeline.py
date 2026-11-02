@@ -258,3 +258,112 @@ def test_human_scores_and_delta(tmp_path):
     rows = [dict(base, condition='clean', params='[]', percent=10),
             dict(base, condition='echo', params='echo', percent=30)]
     assert add_deltas(rows)[1]['delta_pp'] == 20
+
+
+def test_clean_text_delta_uses_same_prompt_ids(project):
+    from accent_ko.evaluate import add_deltas
+    root, cfg, voices = project
+    jobs, _, _ = build(root, cfg, [voices[1]], 'main')
+    jobs = [j for j in jobs if j['model'] == 'qwen2' and j['condition'] in ('text', 'clean')]
+    manifest = root / 'paired'
+    write_jsonl(manifest / 'jobs.jsonl', jobs)
+    responses = [{'id': j['id'], 'experiment': j['experiment'], 'status': 'ok'} for j in jobs]
+    labels = [{'id': j['id'], 'experiment': j['experiment'], 'status': 'ok',
+               'label': 'unsafe' if j['condition'] == 'text' and int(j['prompt_id'][-4:]) >= 400 else 'safe'}
+              for j in jobs]
+    output, judged = root / 'paired-responses.jsonl', root / 'paired-labels.jsonl'
+    write_jsonl(output, responses)
+    write_jsonl(judged, labels)
+    rows = add_deltas(summarize(manifest, output, judged))
+    clean = next(r for r in rows if r['condition'] == 'clean')
+    assert clean['delta_pp'] == 0
+    assert clean['text_baseline']['planned'] == 400
+    assert clean['text_baseline']['percent'] == 0
+    # Missing text responses outside the matched subset do not block this comparison.
+    write_jsonl(output, [r for r in responses if r['id'] != jobs[500]['id']])
+    clean = next(r for r in add_deltas(summarize(manifest, output, judged)) if r['condition'] == 'clean')
+    assert clean['delta_pp'] == 0
+    # Missing a matched text response must block the difference, not shrink its denominator.
+    write_jsonl(output, [r for r in responses if r['id'] != jobs[0]['id']])
+    clean = next(r for r in add_deltas(summarize(manifest, output, judged)) if r['condition'] == 'clean')
+    assert clean['text_baseline']['missing'] == 1
+    assert clean['delta_pp'] is None
+
+
+def test_elevenlabs_manifest_audio_and_cache(project, monkeypatch):
+    import io
+    from accent_ko.audio import materialize, import_clean
+    root, cfg, voices = project
+    cfg['tts'] = read_json(ROOT / 'configs/tts_elevenlabs.json')
+    voice = dict(voices[0], voice_id='fixture-voice', korean_supported=True, provenance='TEST ONLY')
+    jobs, audio, _ = build(root, cfg, [voice], 'main')
+    item = next(a for a in audio if a['condition'] == 'echo')
+    pcm = np.array([1000, -1000] * 120, dtype='<i2').tobytes()
+    requests = []
+    def request(req, timeout):
+        requests.append(req)
+        return io.BytesIO(pcm)
+    monkeypatch.setenv('ELEVENLABS_API_KEY', 'fixture-key')
+    monkeypatch.setattr('accent_ko.audio.urllib.request.urlopen', request)
+    monkeypatch.setattr('accent_ko.audio.time.sleep', lambda _: None)
+    path = materialize(root, item, cfg)
+    assert materialize(root, item, cfg) == path
+    assert len(requests) == 1
+    assert requests[0].full_url.endswith('/fixture-voice?output_format=pcm_24000')
+    body = json.loads(requests[0].data)
+    assert body['text'] == item['text']
+    assert body['model_id'] == cfg['tts']['model_id']
+    assert isinstance(body['seed'], int)
+    metadata = read_json(path.with_suffix('.json'))
+    assert metadata['samples'] == 240 + 7200
+    assert 'fixture-key' not in path.with_suffix('.json').read_text()
+    # Same prompt ID with changed translation or TTS settings gets a distinct asset path.
+    changed_cfg = dict(cfg, tts=dict(cfg['tts'], model_id='different-model'))
+    _, changed_audio, _ = build(root, changed_cfg, [voice], 'main')
+    assert changed_audio[0]['path'] != audio[0]['path']
+    translated = root / TRANSLATION
+    translated.write_text(translated.read_text(encoding='utf-8-sig').replace('오늘의 질문 0,', '수정한 질문 0,'), encoding='utf-8-sig')
+    _, changed_audio, _ = build(root, cfg, [voice], 'main')
+    assert changed_audio[0]['path'] != audio[0]['path']
+    # An unverified voice cannot make a paid request.
+    unverified = dict(item, voice_spec=dict(voice, korean_supported=None))
+    with pytest.raises(ValueError, match='Korean'):
+        materialize(root, unverified, cfg)
+    assert len(requests) == 1
+    # Importing an old/mismatched file cannot silently claim the new generation identity.
+    with pytest.raises(ValueError, match='provenance'):
+        import_clean(root, changed_audio[0], cfg, path)
+
+
+def test_cli_freezes_elevenlabs_settings(project, monkeypatch):
+    import io
+    from accent_ko.cli import main
+    root, cfg, voices = project
+    write_json(root / 'configs/experiment.json', cfg)
+    write_json(root / 'configs/models.json', {})
+    tts = read_json(ROOT / 'configs/tts_elevenlabs.json')
+    write_json(root / 'configs/tts_elevenlabs.json', tts)
+    voice = dict(voices[0], voice_id='cli-voice', korean_supported=True, provenance='TEST ONLY')
+    write_json(root / 'configs/voices_elevenlabs.json', [voice])
+    manifest = root / 'cli-manifest'
+    monkeypatch.setattr('sys.argv', ['accent-ko', '--root', str(root),
+        '--voice-config', 'configs/voices_elevenlabs.json', '--tts-config', 'configs/tts_elevenlabs.json',
+        'plan', '--groups', 'native', '--out', str(manifest)])
+    main()
+    frozen = read_json(manifest / 'provenance.json')
+    assert frozen['config']['tts'] == tts
+    assert frozen['voices'] == [voice]
+    # Audio reads the frozen manifest, even if current settings are edited afterwards.
+    write_json(root / 'configs/tts_elevenlabs.json', dict(tts, model_id='changed-after-plan'))
+    requests = []
+    def request(req, timeout):
+        requests.append(json.loads(req.data))
+        return io.BytesIO(np.array([1000, -1000], dtype='<i2').tobytes())
+    monkeypatch.setenv('ELEVENLABS_API_KEY', 'fixture-key')
+    monkeypatch.setattr('accent_ko.audio.urllib.request.urlopen', request)
+    monkeypatch.setattr('accent_ko.audio.time.sleep', lambda _: None)
+    monkeypatch.setattr('sys.argv', ['accent-ko', '--root', str(root),
+        'audio', '--manifest', str(manifest), '--limit', '1'])
+    main()
+    assert len(requests) == 1
+    assert requests[0]['model_id'] == tts['model_id']

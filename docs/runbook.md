@@ -20,6 +20,23 @@ accent-ko matrix
 
 ## 2. 실행 목록 고정
 
+본 실험의 ElevenLabs 경로는 패키지의 `plan → audio → run → judge → summarize`입니다. 노트북과 `scripts/synthesize_elevenlabs.py`는 파일럿·탐색용으로 유지하며, 그 결과를 본 실험 목록과 섞지 않습니다.
+
+ElevenLabs를 사용할 때는 `configs/voices_elevenlabs.json`에서 실제 사용할 슬롯마다 `provenance`에 선정 근거와 한국어 청취 확인 기록을 쓰고 `korean_supported: true`를 기록합니다. 청취하지 않은 슬롯을 일괄 true로 바꾸지 마세요. 미확인 슬롯은 자동 제외되지 않으므로, 수행할 슬롯만 담은 별도 화자 설정 파일을 만들고 그 범위를 보고합니다. `voice_id`나 확인 기록이 없는 슬롯은 음성 생성 시 중단됩니다.
+
+TTS 설정은 `configs/tts_elevenlabs.json`에 있습니다. 현재 `eleven_v3`, `pcm_24000`이며 화자별 `settings`는 요청의 `voice_settings`로 전달됩니다. 변경은 목록 생성 전에 확정합니다.
+
+```bash
+# --voice-config와 --tts-config는 하위 명령 앞에 지정합니다.
+# 400문항 목록 없이 먼저 native 범위의 계획을 검토하는 예시입니다.
+accent-ko --voice-config configs/voices_elevenlabs.json --tts-config configs/tts_elevenlabs.json plan --suite main --groups native --out data/manifests/elevenlabs-native-v2
+```
+
+위 계획은 음성 생성이나 API 호출을 하지 않습니다. 선택한 화자 중 미확인 슬롯이 있으면 생성 전에 화자 설정을 정리해야 합니다. 전체 main·defense·ablation·sqa도 같은 두 설정 옵션을 붙여 각각 새 폴더로 계획합니다.
+
+기존 TTSMaker 재현 경로는 기본 설정으로 남아 있습니다:
+
+
 ```bash
 accent-ko plan --suite main --out data/manifests/main
 accent-ko plan --suite defense --out data/manifests/defense
@@ -30,6 +47,20 @@ accent-ko plan --suite sqa --out data/manifests/sqa
 각 폴더에 jobs.jsonl, audio.jsonl, provenance.json을 생성합니다. 계획 생성은 실제 합성/추론을 하지 않습니다. full main은 400문항 선정 목록이 없으면 중단됩니다. native만 먼저 목록을 확인하려면 `--groups native`를 사용할 수 있지만 이를 전체 실험으로 보고하면 안 됩니다. 방어는 de/it 출신 native 슬롯, 절제는 de 슬롯으로 제한됩니다.
 
 ## 3. 음성 준비
+
+ElevenLabs 본 실험 목록은 다음처럼 생성합니다. 이 명령은 실제 유료 API를 호출합니다.
+
+```bash
+export ELEVENLABS_API_KEY=...
+accent-ko audio --manifest data/manifests/elevenlabs-native-v2 --limit 1
+# 점검 후 --limit을 제거하면 같은 목록으로 이어서 실행합니다.
+```
+
+`audio`는 목록에 고정된 공급자·TTS 모델·화자·설정을 사용합니다. clean을 한 번 생성하고 모든 음향 조건에서 재사용합니다. 원문 텍스트·화자 설정·TTS 설정·seed가 달라지면 새 음성 경로를 사용하며, 기존 파일은 출처와 해시가 일치할 때만 재사용합니다. 요청 seed는 기록하지만 공급자의 결정적 재생성을 보장하지 않으므로 실제 WAV와 해시를 보관합니다. 유료 호출은 자동 재시도하지 않습니다.
+
+ElevenLabs 목록의 `import-clean`은 같은 생성 출처가 담긴 JSON과 WAV 해시가 있어야 합니다. 이전 파일럿 스크립트의 메타데이터나 WAV만 있는 파일은 새 설정으로 생성된 것처럼 등록하지 않습니다. 기존 파일럿은 별도로 보존하고 본 실험 경로에서 새로 생성하세요.
+
+아래는 기존 TTSMaker 경로입니다.
 
 TTSMaker의 원래 ID를 확인한 뒤 계정 토큰을 환경변수 `TTSMAKER_TOKEN`에 설정합니다. 토큰을 설정 파일이나 Git에 넣지 않습니다. 기본 API는 공개 v1 계약이며, API 사용 가능 여부/계정별 제한은 실제 계정에서 확인해야 합니다. 연구 당시 서비스와 현재 서비스가 동일한 파형을 생성한다고 가정하지 않습니다.
 
@@ -91,6 +122,8 @@ accent-ko wer-summary --transcripts results/transcripts.jsonl --out results/wer.
 accent-ko --model-config configs/models.lock.json judge --kind sqa_judge --manifest data/manifests/sqa --responses results/sqa-qwen2.jsonl --out results/sqa-qwen2-judge.jsonl
 accent-ko summarize --manifest data/manifests/sqa --responses results/sqa-qwen2.jsonl --labels results/sqa-qwen2-judge.jsonl --out results/sqa-qwen2-summary.json
 ```
+
+`summarize`의 main clean 대비 텍스트 차이(`delta_pp`)는 해당 음성과 같은 prompt ID의 텍스트 응답만 사용합니다. natural/synthetic의 400문항을 전체 520문항 텍스트 비율과 비교하지 않습니다. `text_baseline`에 비교 문항 수·유효 평가 수·누락 수·완료 여부·비율을 함께 기록하며, 비교 대상에 누락이나 판정 오류가 있으면 차이는 null입니다. 텍스트 추론 자체는 520문항을 한 번만 실행합니다.
 
 `judge`는 응답 파일의 해시를 고정합니다. 추론을 추가해서 응답 파일이 바뀌었다면 새로운 평가 출력 파일을 지정합니다. 기존 판정과 다른 버전의 응답을 섞지 않습니다. summarize에는 실행하지 않은 나머지 모델의 누락 그룹도 나타나며, 완료 여부를 숨기지 않습니다. 원한다면 5개 모델의 서로 다른 ID를 가진 결과 파일을 합친 뒤 한 번에 평가할 수 있습니다. 중복 ID는 거절합니다.
 

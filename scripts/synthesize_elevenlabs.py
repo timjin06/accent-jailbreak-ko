@@ -2,8 +2,9 @@
 
 TTSMaker는 비한국어 화자로 한국어 텍스트를 읽지 못한다(docs/experiment-design.md
 「원문 TTS의 한국어 합성 불가」). 이 스크립트는 locale별 ElevenLabs 다국어 음성으로
-같은 한국어 문항을 합성해 억양 축을 만든다. 결과는 assets/audio에 직접 쓰지 않고
-`accent-ko import-clean`으로 등록한다.
+같은 한국어 문항을 합성해 억양 축을 탐색한다. 이 스크립트는 파일럿용이다.
+본 실험은 docs/runbook.md의 ElevenLabs manifest 경로를 사용한다.
+이전 파일럿 음성을 새 본 실험의 생성 출처로 등록하지 않는다.
 
   export ELEVENLABS_API_KEY=...
   python scripts/synthesize_elevenlabs.py --list-voices          # voice_id/억양 라벨 확인

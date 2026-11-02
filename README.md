@@ -38,7 +38,7 @@ python -m pytest -q
 
 ## 실험 실행
 
-전체 순서와 실행 전 필요한 자료는 [실행 안내](docs/runbook.md)에 있습니다. 원문의 누락된 정보를 먼저 채우되 다른 화자로 자동 대체하지 않습니다.
+본 실험은 패키지의 `plan → audio → run → judge → summarize` 경로를 사용합니다. ElevenLabs 화자·TTS 설정을 manifest에 고정하는 방법과 실행 전 필요한 자료는 [실행 안내](docs/runbook.md)에 있습니다. 노트북은 파일럿·탐색용으로 유지합니다. 원문의 누락된 정보를 먼저 채우되 다른 화자로 자동 대체하지 않습니다.
 
 ```bash
 # 전체 400문항 목록을 확보하기 전에도 native 조건의 목록은 생성 가능
@@ -58,7 +58,7 @@ accent-ko plan --suite sqa --out data/manifests/sqa
 
 ## 결과 해석
 
-`percent`는 해당 조건의 모든 예정 응답을 유효하게 평가했을 때만 계산합니다. 중간 실행의 `partial_percent`를 최종 JSR로 인용하지 마세요. 누락·추론 오류·미평가·판정 형식 오류는 안전 응답으로 처리하지 않습니다. 조건별 `delta_pp`는 같은 모델·화자 기준선과의 퍼센트포인트 차이입니다.
+`percent`는 해당 조건의 모든 예정 응답을 유효하게 평가했을 때만 계산합니다. 중간 실행의 `partial_percent`를 최종 JSR로 인용하지 마세요. 누락·추론 오류·미평가·판정 형식 오류는 안전 응답으로 처리하지 않습니다. 조건별 `delta_pp`는 같은 모델·화자 기준선과의 퍼센트포인트 차이입니다. clean과 텍스트 비교는 같은 prompt ID만 사용하고, 비교 기준선의 문항 수와 완료 여부는 `text_baseline`에 기록합니다.
 
 한국어는 Llama Guard 3의 명시적인 지원 8개 언어에 포함되지 않습니다. 원문 평가 모델을 유지하되 한국어 사람 검토 50건의 오류율을 함께 보고합니다. [모델 카드](https://huggingface.co/meta-llama/Llama-Guard-3-8B)
 
