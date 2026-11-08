@@ -16,7 +16,7 @@ from .plan import save
 
 OWNERS = {
     'heesu': ('natural-en-AU', 'synthetic-zh'),
-    'seongje': ('natural-en-ZA', 'native-es'),
+    'sungjeh': ('natural-en-ZA', 'native-es'),
     'myeongjin': ('natural-en-KE', 'synthetic-ar'),
     'baseline': ('synthetic-ko',),
 }
@@ -44,7 +44,8 @@ def probe_voices(voices, config, key):
 
 def main():
     parser = argparse.ArgumentParser(description='Team Korean TTS pilot')
-    parser.add_argument('owner', choices=(*OWNERS, 'all'))
+    parser.add_argument('owner', type=lambda name: 'sungjeh' if name == 'seongje' else name,
+                        choices=(*OWNERS, 'all'))
     parser.add_argument('action', choices=('check', 'probe', 'sample', 'cer', 'plan'))
     parser.add_argument('--speakers', type=int, choices=(1, 2))
     parser.add_argument('--voice-id', action='append', default=[], metavar='SLOT=ID')

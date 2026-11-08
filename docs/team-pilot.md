@@ -5,7 +5,7 @@
 | 이름 | 실행 인수 | 화자 |
 | --- | --- | --- |
 | 희수 | `heesu` | 호주 영어, 중국어 |
-| 성제 | `seongje` | 남아공 영어, 스페인 본토 스페인어 |
+| 성제 | `sungjeh` | 남아공 영어, 스페인 본토 스페인어 |
 | 명진 | `myeongjin` | 케냐 영어, 아랍어 |
 | 공통 대조군 | `baseline` | 표준 한국어 화자 2명 |
 
@@ -26,7 +26,7 @@ import subprocess
 import sys
 from google.colab import userdata
 
-owner = "heesu"  # heesu, seongje, myeongjin 중 자신의 담당
+owner = "heesu"  # heesu, sungjeh, myeongjin 중 자신의 담당
 os.environ["ELEVENLABS_API_KEY"] = userdata.get("ELEVENLABS_API_KEY")
 command = [sys.executable, "-m", "accent_ko.team", owner]
 subprocess.run([*command, "check"], check=True)
@@ -59,7 +59,7 @@ files.download(f"/content/{owner}-pilot.zip")
 
 ```text
 python -m accent_ko.team heesu check
-python -m accent_ko.team seongje check
+python -m accent_ko.team sungjeh check
 python -m accent_ko.team myeongjin check
 python -m accent_ko.team baseline check
 ```
@@ -79,7 +79,7 @@ python -m accent_ko.team all probe --speakers 1
 
 ```text
 python -m accent_ko.team heesu sample
-python -m accent_ko.team seongje sample
+python -m accent_ko.team sungjeh sample
 python -m accent_ko.team myeongjin sample
 python -m accent_ko.team baseline sample
 ```
