@@ -85,10 +85,38 @@ def store_audio(path, x, sr, provenance):
                'samples': len(x), 'provenance': provenance})
 
 
+def elevenlabs_seed(config, item):
+    parts = [config['seed'], item['text']]
+    if config['tts'].get('seed_scope') != 'prompt':
+        parts.insert(1, item['voice'])
+    return int(digest(parts)[:8], 16)
+
+
+def elevenlabs_payload(tts, voice, text, seed):
+    return {'text': text, 'model_id': tts['model_id'],
+            'voice_settings': {**tts['settings'], **voice['settings']}, 'seed': seed}
+
+
+def elevenlabs_pcm(tts, voice, text, seed, key):
+    if tts['output_format'] != 'pcm_24000':
+        raise ValueError('ElevenLabs manifest synthesis requires pcm_24000')
+    payload = elevenlabs_payload(tts, voice, text, seed)
+    req = urllib.request.Request(
+        f"{tts['endpoint']}/{voice['voice_id']}?output_format={tts['output_format']}",
+        data=json.dumps(payload).encode(),
+        headers={'Content-Type': 'application/json', 'xi-api-key': key})
+    # Paid requests are not retried.
+    with urllib.request.urlopen(req, timeout=120) as response:
+        pcm = response.read()
+    if not pcm or len(pcm) % 2:
+        raise ValueError('ElevenLabs did not return non-empty 16-bit mono PCM')
+    return pcm
+
+
 def clean_location(root, item, config):
     provenance = {'text': item['text'], 'voice': item['voice_spec'], 'tts': config['tts']}
     if config['tts'].get('provider') == 'elevenlabs':
-        provenance['seed'] = int(digest([config['seed'], item['voice'], item['text']])[:8], 16)
+        provenance['seed'] = elevenlabs_seed(config, item)
     path = Path(root) / 'assets/audio' / ('clean-' + digest(provenance)[:24] + '.wav')
     return path, provenance
 
@@ -105,23 +133,10 @@ def make_clean(root, item, config):
     tts = config['tts']
     provider = tts.get('provider', 'ttsmaker')
     if provider == 'elevenlabs':
-        if tts['output_format'] != 'pcm_24000':
-            raise ValueError('ElevenLabs manifest synthesis requires pcm_24000')
         key = os.environ.get('ELEVENLABS_API_KEY')
         if not key:
             raise ValueError('Set ELEVENLABS_API_KEY')
-        payload = {'text': item['text'], 'model_id': tts['model_id'],
-                   'voice_settings': {**tts['settings'], **voice['settings']},
-                   'seed': provenance['seed']}
-        req = urllib.request.Request(
-            f"{tts['endpoint']}/{voice['voice_id']}?output_format={tts['output_format']}",
-            data=json.dumps(payload).encode(),
-            headers={'Content-Type': 'application/json', 'xi-api-key': key})
-        # Paid requests are not retried. Store the returned waveform once for all conditions.
-        with urllib.request.urlopen(req, timeout=120) as response:
-            pcm = response.read()
-        if not pcm or len(pcm) % 2:
-            raise ValueError('ElevenLabs did not return non-empty 16-bit mono PCM')
+        pcm = elevenlabs_pcm(tts, voice, item['text'], provenance['seed'], key)
         x = np.frombuffer(pcm, dtype='<i2').astype(np.float64) / 32768
         normalize(x)
         store_audio(path, x, 24000, provenance)

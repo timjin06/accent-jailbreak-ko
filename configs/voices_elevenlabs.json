@@ -204,9 +204,9 @@
     "group": "natural",
     "source_locale": "en-KE",
     "speaker": 1,
-    "voice_id": null,
-    "elevenlabs_name": null,
-    "accent_label": null,
+    "voice_id": "ijKilL5CnjXKMWDHOJH8",
+    "elevenlabs_name": "Yna Agalo - Kenyan Lady",
+    "accent_label": "Kenyan English (Voice Library description)",
     "settings": {}
   },
   {

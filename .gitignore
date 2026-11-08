@@ -15,6 +15,7 @@ results/*
 !results/.gitkeep
 !results/pilot_text_guard.jsonl
 .env.local
+docs/eleven.env
 assets/elevenlabs/*
 
 # 테스트 노트북 실행 결과

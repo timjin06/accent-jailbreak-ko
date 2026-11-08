@@ -20,7 +20,7 @@ import wave
 from pathlib import Path
 
 from accent_ko.data import TRANSLATION
-from accent_ko.io import file_hash, write_json
+from accent_ko.io import file_hash, read_json, write_json
 
 API = 'https://api.elevenlabs.io/v1'
 RATE = 24000  # pcm_24000: 상위 요금제 없이 받을 수 있는 최고 PCM 레이트
@@ -80,6 +80,7 @@ p.add_argument('--prompts', type=Path, default=Path(TRANSLATION))
 p.add_argument('--column', default='goal_ko', help='합성할 텍스트 열: goal_ko(한국어), goal(영어 원문)')
 p.add_argument('--limit', type=int, default=5, help='앞쪽 문항 수. 억양용 400문항 선정 규칙이 아님')
 p.add_argument('--model', default='eleven_v3')
+p.add_argument('--tts-config', type=Path, help='Explicit ElevenLabs request settings')
 p.add_argument('--out', type=Path, default=Path('assets/elevenlabs'))
 p.add_argument('--list-voices', action='store_true', help='계정에서 쓸 수 있는 voice_id와 억양 라벨 출력')
 p.add_argument('--self-check', action='store_true')
@@ -105,18 +106,30 @@ if not slots:
 if unfilled:
     print(f'voice_id 미지정 {len(unfilled)}개 슬롯 건너뜀: {", ".join(unfilled)}')
 
+if a.tts_config:
+    from accent_ko.audio import elevenlabs_payload, elevenlabs_seed
+    config = read_json(Path('configs/experiment.json'))
+    config['tts'] = read_json(a.tts_config)
+    if config['tts']['output_format'] != f'pcm_{RATE}':
+        p.error(f'--tts-config must use pcm_{RATE}')
+
 for slot in slots:
     for pid, text in read_prompts(a.prompts, a.column, a.limit):
         path = a.out / slot['id'] / f'{pid}.wav'
         if path.exists():
             continue
-        payload = {'text': text, 'model_id': a.model, **slot.get('settings', {})}
+        if a.tts_config:
+            seed = elevenlabs_seed(config, {'voice': slot['id'], 'text': text})
+            payload = elevenlabs_payload(config['tts'], slot, text, seed)
+        else:
+            payload = {'text': text, 'model_id': a.model, **slot.get('settings', {})}
         pcm = call(f"text-to-speech/{slot['voice_id']}?output_format=pcm_{RATE}", payload)
         write_wav(path, pcm)
         write_json(path.with_suffix('.json'), {
             'sha256': file_hash(path), 'sampling_rate': RATE, 'samples': len(pcm) // 2,
             'provenance': {'provider': 'elevenlabs', 'endpoint': f'{API}/text-to-speech',
-                           'model_id': a.model, 'output_format': f'pcm_{RATE}', 'voice': slot,
+                           'model_id': payload['model_id'], 'output_format': f'pcm_{RATE}', 'voice': slot,
+                           'voice_settings': payload.get('voice_settings'), 'seed': payload.get('seed'),
                            'prompt_id': pid, 'column': a.column, 'text': text,
                            'note': '원문 논문 TTS 아님. 억양 유지 여부는 청취 확인 필요'}})
         print(path)

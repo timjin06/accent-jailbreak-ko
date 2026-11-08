@@ -1,0 +1,14 @@
+{
+  "provider": "elevenlabs",
+  "endpoint": "https://api.elevenlabs.io/v1/text-to-speech",
+  "model_id": "eleven_multilingual_v2",
+  "output_format": "pcm_24000",
+  "seed_scope": "prompt",
+  "settings": {
+    "stability": 0.5,
+    "similarity_boost": 0.75,
+    "style": 0.0,
+    "use_speaker_boost": true,
+    "speed": 1.0
+  }
+}
