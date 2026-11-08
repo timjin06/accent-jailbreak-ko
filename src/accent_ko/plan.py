@@ -17,10 +17,14 @@ def counts(voices):
     return out
 
 
-def build(root, config, voices, suite, groups=None):
+def build(root, config, voices, suite, groups=None, *, team_pilot=None):
     root = Path(root)
     rows, hashes = load_dataset(root)
     selected = [v for v in voices if groups is None or v['group'] in groups]
+    if team_pilot is not None:
+        if suite != 'main' or not 1 <= team_pilot['prompt_count'] <= len(rows):
+            raise ValueError('Team pilot requires main and a valid prompt count')
+        rows = rows[:team_pilot['prompt_count']]
     if suite == 'sqa':
         selected = [v for v in selected if v['group'] == 'native']
         rows = sqa_dataset(root / config['sqa_path'])
@@ -30,7 +34,9 @@ def build(root, config, voices, suite, groups=None):
         if not selected:
             raise ValueError(f'No original native voice slots selected for {suite}: {locales}')
     subset = None
-    if suite == 'main' and any(v['group'] != 'native' for v in selected):
+    if team_pilot is not None:
+        subset = rows
+    elif suite == 'main' and any(v['group'] != 'native' for v in selected):
         subset = accent_subset(root / config['accent_subset_path'], rows)
     if suite == 'defense':
         defense = (root / config['defense_path']).read_text(encoding='utf-8').strip()
@@ -42,7 +48,10 @@ def build(root, config, voices, suite, groups=None):
                   'suite': suite, 'groups': groups, 'defense': defense,
                   'subset_ids': [r['id'] for r in subset] if subset else None,
                   'sqa': rows if suite == 'sqa' else None}
+    if team_pilot is not None:
+        provenance['team_pilot'] = {**team_pilot, 'prompt_ids': [r['id'] for r in rows]}
     fingerprint = digest(provenance)
+    models = ('qwen2',) if team_pilot is not None else MODELS
     jobs, audio = [], {}
     def add(r, v, condition, params, models, system=None):
         voice = v['id'] if v else None
@@ -59,15 +68,16 @@ def build(root, config, voices, suite, groups=None):
                    'reference_answer': r.get('answer'), 'experiment': fingerprint}
             job['id'] = digest(job)
             jobs.append(job)
-    if suite == 'main':
+    if suite == 'main' and (team_pilot is None or team_pilot['owner'] in ('baseline', 'all')):
         for r in rows:
-            add(r, None, 'text', {}, MODELS)
+            add(r, None, 'text', {}, models)
     for v in selected:
         prompts = subset if v['group'] != 'native' and suite == 'main' else rows
         for r in prompts:
             if suite in ('main', 'sqa'):
-                for c in CONDITIONS if suite == 'main' else ('clean',):
-                    add(r, v, c, config['effects'].get(c, {}), MODELS)
+                conditions = CONDITIONS if suite == 'main' and team_pilot is None else ('clean',)
+                for c in conditions:
+                    add(r, v, c, config['effects'].get(c, {}), models)
             elif suite == 'defense':
                 for system in (None, defense):
                     add(r, v, 'reverb_teisco', config['effects']['reverb_teisco'],
@@ -81,8 +91,8 @@ def build(root, config, voices, suite, groups=None):
     return jobs, list(audio.values()), provenance
 
 
-def save(root, out, config, voices, suite, groups=None):
-    jobs, audio, provenance = build(root, config, voices, suite, groups)
+def save(root, out, config, voices, suite, groups=None, *, team_pilot=None):
+    jobs, audio, provenance = build(root, config, voices, suite, groups, team_pilot=team_pilot)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     if any(out.iterdir()):
